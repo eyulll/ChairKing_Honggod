@@ -54,8 +54,8 @@ static int havemodes = 0;
 #define KEY_PAUSE  4
 #define KEY_QUIT   5
 
-#define HIGH_SCORE_FILE "/var/games/tetris.scores"
-#define TEMP_SCORE_FILE "/tmp/tetris-tmp.scores"
+#define HIGH_SCORE_FILE ".tetris.scores"	// scores file hide
+#define TEMP_SCORE_FILE ".tetris-tmp.scores"	//tmp scores file hide
 
 char *keys = DEFAULT_KEYS;
 int level = 1;
@@ -281,6 +281,25 @@ int tty_fix (void)
    return tcsetattr(fileno(stdin), TCSANOW, &savemodes);
 }
 
+int mainpage()
+{
+	int input;
+	
+	clrscr();
+	fprintf(stdout, "*------------------------------*\n");
+	fprintf(stdout, "|             Tetris           |\n");
+	fprintf(stdout, "|                              |\n");
+	fprintf(stdout, "|            1. Start          |\n");
+	fprintf(stdout, "|            2. Option         |\n");
+	fprintf(stdout, "|            3. Ranking        |\n");
+	fprintf(stdout, "|            4. Exit           |\n");
+	fprintf(stdout, "*------------------------------*\n");
+	fprintf(stdout, "Select the menu : ");
+	scanf("%d", &input);
+
+	return input;
+}
+
 int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused)))
 {
    int c = 0, i, j, *ptr;
@@ -289,6 +308,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    sigset_t set;
    struct sigaction action;
 
+   mainpage();
    /* Initialize board */
    ptr = board;
    for (i = B_SIZE; i; i--)

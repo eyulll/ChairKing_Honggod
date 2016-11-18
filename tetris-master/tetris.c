@@ -281,10 +281,22 @@ int tty_fix (void)
    return tcsetattr(fileno(stdin), TCSANOW, &savemodes);
 }
 
+// plz add function
+int case_two()
+{i
+	fprintf(stdout,"You choose Option menu\n");
+	return 0; // use this 'return value' for quit the mainpage
+}
+int case_three()
+{
+	fprintf(stdout,"You choose Ranking menu\n");
+	return 0;
+}
+
 int mainpage()
 {
 	int input;
-	
+
 	clrscr();
 	fprintf(stdout, "*------------------------------*\n");
 	fprintf(stdout, "|             Tetris           |\n");
@@ -302,13 +314,25 @@ int mainpage()
 
 int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused)))
 {
-   int c = 0, i, j, *ptr;
+   int c = 0, i, j, *ptr, main_num;
    int pos = 17;
    int *backup;
    sigset_t set;
    struct sigaction action;
-
-   mainpage();
+   
+   while(1)
+   {
+	   main_num = mainpage();
+	   if(main_num==1)
+		   break;
+	   else if(main_num==2)
+		   case_two();
+	   else if(main_num==3)
+		   case_three();
+	   else if(main_num==4)
+		   return 0;
+	   else fprintf(stdout,"wrong number");
+   }
    /* Initialize board */
    ptr = board;
    for (i = B_SIZE; i; i--)

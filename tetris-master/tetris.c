@@ -303,13 +303,13 @@ void music()
 		exit(-1);
 	}
 	else if (music_pid == 0)
-		execlp("mpg123", "mpg123", "-q", "tetris.mp3", 0);
-	mainpage();
+		execlp("mpg123", "mpg123", "-q", ".tetris.mp3", 0);
 }
 int mainpage()
 {
 	int input;
 
+	music();
 	clrscr();
 	fprintf(stdout, "*------------------------------*\n");
 	fprintf(stdout, "|             Tetris           |\n");
@@ -335,7 +335,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    
    while(1)
    {
-	   main_num = music();
+	   main_num = mainpage();
 	   if(main_num==1
 		   break;
 	   else if(main_num==2)
@@ -442,6 +442,8 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          if (c == keys[KEY_QUIT])
          {
             clrscr();
+			sprintf(kil, "%s%d", kil, music_pid);
+			system(kil);
             gotoxy(0,0);
             textattr(RESETATTR);
 

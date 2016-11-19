@@ -336,14 +336,18 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    while(1)
    {
 	   main_num = mainpage();
-	   if(main_num==1
+	   if(main_num==1)
 		   break;
 	   else if(main_num==2)
 		   case_two();
 	   else if(main_num==3)
 		   case_three();
 	   else if(main_num==4)
+	   {
+		   sprintf(kil, "%s%d", kil, music_pid);
+		   system(kil);
 		   return 0;
+	   }
 	   else fprintf(stdout,"wrong number");
    }
    /* Initialize board */

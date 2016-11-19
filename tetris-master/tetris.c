@@ -311,14 +311,23 @@ int mainpage()
 
 	music();
 	clrscr();
+	gotoxy(25, 2);
 	fprintf(stdout, "*------------------------------*\n");
-	fprintf(stdout, "|             Tetris           |\n");
+	gotoxy(25, 3);
+	fprintf(stdout, "|            Tetris            |\n");
+	gotoxy(25, 4);
 	fprintf(stdout, "|                              |\n");
-	fprintf(stdout, "|            1. Start          |\n");
-	fprintf(stdout, "|            2. Option         |\n");
-	fprintf(stdout, "|            3. Ranking        |\n");
-	fprintf(stdout, "|            4. Exit           |\n");
+	gotoxy(25, 5);
+	fprintf(stdout, "|           1. Start           |\n");
+	gotoxy(25, 6);
+	fprintf(stdout, "|           2. Option          |\n");
+	gotoxy(25, 7);
+	fprintf(stdout, "|           3. Ranking         |\n");
+	gotoxy(25, 8);
+	fprintf(stdout, "|           4. Exit            |\n");
+	gotoxy(25, 9);
 	fprintf(stdout, "*------------------------------*\n");
+	gotoxy(25, 10);
 	fprintf(stdout, "Select the menu : ");
 	scanf("%d", &input);
 
@@ -446,8 +455,8 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          if (c == keys[KEY_QUIT])
          {
             clrscr();
-			sprintf(kil, "%s%d", kil, music_pid);
-			system(kil);
+	    sprintf(kil, "%s%d", kil, music_pid);
+	    system(kil);
             gotoxy(0,0);
             textattr(RESETATTR);
 

@@ -62,6 +62,8 @@ int level = 1;
 int points = 0;
 int lines_cleared = 0;
 int board[B_SIZE], shadow[B_SIZE];
+pid_t music_pid;
+char kil[20] = "kill -s 9 ";
 
 int *peek_shape;                /* peek preview of next shape */
 int *shape;
@@ -283,7 +285,7 @@ int tty_fix (void)
 
 // plz add function
 int case_two()
-{i
+{
 	fprintf(stdout,"You choose Option menu\n");
 	return 0; // use this 'return value' for quit the mainpage
 }
@@ -292,7 +294,18 @@ int case_three()
 	fprintf(stdout,"You choose Ranking menu\n");
 	return 0;
 }
-
+void music()
+{
+	music_pid = fork();
+	if (music_pid < 0)
+	{
+		puts("fork failure");
+		exit(-1);
+	}
+	else if (music_pid == 0)
+		execlp("mpg123", "mpg123", "-q", "tetris.mp3", 0);
+	mainpage();
+}
 int mainpage()
 {
 	int input;
@@ -322,8 +335,8 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    
    while(1)
    {
-	   main_num = mainpage();
-	   if(main_num==1)
+	   main_num = music();
+	   if(main_num==1
 		   break;
 	   else if(main_num==2)
 		   case_two();

@@ -64,6 +64,7 @@ int lines_cleared = 0;
 int board[B_SIZE], shadow[B_SIZE];
 pid_t music_pid;
 char kil[20] = "kill -s 9 ";
+int music_status = 0;
 
 int *peek_shape;                /* peek preview of next shape */
 int *shape;
@@ -283,10 +284,61 @@ int tty_fix (void)
    return tcsetattr(fileno(stdin), TCSANOW, &savemodes);
 }
 
+void music()
+{
+	if(music_status == 0)
+	{
+		music_pid = fork();
+		if(music_pid < 0)
+		{
+			puts("fork failure");
+			exit(-1);
+		}
+		else if (music_pid == 0)
+			execlp("mpg123", "mpg123", "-q", ".tetris.mp3", 0);
+		music_status = 1;
+	}
+	else if(music_status == 1)
+		return 0;
+}
+
 // plz add function
 int case_two()
 {
-	fprintf(stdout,"You choose Option menu\n");
+	int input;
+	char kill_music[20] = "kill -s 9 ";
+
+	clrscr();
+	gotoxy(26, 2);
+	puts("*-------- Option --------*");
+	gotoxy(26, 3);
+	puts("|      Sound On  : 1     |");
+	gotoxy(26, 4);
+	puts("|      Sound off : 2     |");
+	gotoxy(26, 5);
+	puts("|      Quit Menu : 3     |");
+	gotoxy(26, 6);
+	puts("*------------------------*");
+	gotoxy(26, 7);
+	fprintf(stdout, "Select Option : ");
+	scanf("%d", &input);
+
+	if(input == 1)
+		music();
+	else if(input == 2)
+	{
+		sprintf(kill_music, "%s%d", kill_music, music_pid);
+		system(kill_music);
+		music_status = 0;
+	}
+	else if(input == 3)
+	{
+		return 0;
+	}
+	else
+	{
+		puts("Incorrect options");
+	}
 	return 0; // use this 'return value' for quit the mainpage
 }
 int case_three()
@@ -294,22 +346,10 @@ int case_three()
 	fprintf(stdout,"You choose Ranking menu\n");
 	return 0;
 }
-void music()
-{
-	music_pid = fork();
-	if (music_pid < 0)
-	{
-		puts("fork failure");
-		exit(-1);
-	}
-	else if (music_pid == 0)
-		execlp("mpg123", "mpg123", "-q", ".tetris.mp3", 0);
-}
 int mainpage()
 {
 	int input;
 
-	music();
 	clrscr();
 	gotoxy(25, 2);
 	fprintf(stdout, "*------------------------------*\n");
@@ -341,7 +381,8 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    int *backup;
    sigset_t set;
    struct sigaction action;
-   
+  
+   music();
    while(1)
    {
 	   main_num = mainpage();
@@ -355,6 +396,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
 	   {
 		   sprintf(kil, "%s%d", kil, music_pid);
 		   system(kil);
+		   clrscr();
 		   return 0;
 	   }
 	   else fprintf(stdout,"wrong number");

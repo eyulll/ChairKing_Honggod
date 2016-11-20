@@ -209,8 +209,8 @@ void show_high_score (void)
 
    if ((tmpscore = fopen (HIGH_SCORE_FILE, "a")))
    {
-	   printf("Enter your name : ");
-      gets(name);
+	   printf("Enter your name(within 10 characters) : ");
+      gets_s(name, 10);
 
       if (!name)
          name = "anonymous";

@@ -205,16 +205,20 @@ void show_high_score (void)
 {
 #ifdef ENABLE_HIGH_SCORE
    FILE *tmpscore;
-   char *name;
-
-   if ((tmpscore = fopen (HIGH_SCORE_FILE, "a")))
+   int i;   char name_ch;   char name[10];   
+   if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
 	   printf("Enter your name(within 10 characters) : ");
-      gets_s(name, 10);
-
-      if (!name)
-         name = "anonymous";
-
+	   for (i = 0; ; i++)
+	   {
+		   name_ch = getchar();
+		   name[i] = name_ch;
+		   if (name_ch == '\n')
+			   break;
+		   else
+			   printf("%c", name_ch);
+		}
+	   printf("\n");
       fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
       fclose (tmpscore);
 

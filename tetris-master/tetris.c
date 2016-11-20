@@ -205,10 +205,12 @@ void show_high_score (void)
 {
 #ifdef ENABLE_HIGH_SCORE
    FILE *tmpscore;
+   char *name;
 
    if ((tmpscore = fopen (HIGH_SCORE_FILE, "a")))
    {
-      char *name = getenv("LOGNAME");
+	   printf("Enter your name : ");
+      scanf("%s", name);
 
       if (!name)
          name = "anonymous";

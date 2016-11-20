@@ -210,7 +210,7 @@ void show_high_score (void)
    if ((tmpscore = fopen (HIGH_SCORE_FILE, "a")))
    {
 	   printf("Enter your name : ");
-      scanf("%s", name);
+      gets(name);
 
       if (!name)
          name = "anonymous";
@@ -301,7 +301,7 @@ int tty_fix (void)
 
 // plz add function
 int case_two()
-{i
+{
 	fprintf(stdout,"You choose Option menu\n");
 	return 0; // use this 'return value' for quit the mainpage
 }

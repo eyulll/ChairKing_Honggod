@@ -105,7 +105,7 @@ int update (void)
 {
    int x, y;
 #ifdef ENABLE_PREVIEW
-   const int start = 5;
+   const int start = 7;
    int preview[B_COLS * 10];
    int shadow_preview[B_COLS * 10];
 
@@ -160,10 +160,10 @@ int update (void)
    printf ("Points : %d", points);
 #endif
 #ifdef ENABLE_PREVIEW
-   gotoxy (26 + 28, 5);
+   gotoxy (26 + 28, 7);
    printf ("Preview:");
 #endif
-   gotoxy (26 + 28, 10);
+   gotoxy (26 + 28, 12);
    printf ("Keys:");
 
    return getchar ();
@@ -226,11 +226,27 @@ void show_high_score (void)
 #endif /* ENABLE_HIGH_SCORE */
 }
 
+void top_score(void)
+{
+	FILE *score;
+	int top;
+
+	if ((score = fopen(HIGH_SCORE_FILE, "r")))
+	{
+		fscanf(score, "%7d", &top);
+		fclose(score);
+	}
+
+	gotoxy(26 + 28, 5);
+	printf("Best Score : %d", top);
+}
+
 void show_online_help (void)
 {
-   const int start = 11;
+   const int start = 13;
 
    textattr(RESETATTR);
+   top_score();
    gotoxy (26 + 28, start);
    puts("j     - left");
    gotoxy (26 + 28, start + 1);

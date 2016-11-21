@@ -210,12 +210,12 @@ void show_high_score (void)
    FILE *tmpscore;
    int i;
    char name_ch;
-   char name[10] = { '\0' };
+   char name[11] = { '\0' };
    
    if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
 	   printf("Enter your name(within 10 characters) : ");
-	   for (i = 0; ; i++)
+	   for (i = 0; i < 11; i++)
 	   {
 		   name_ch = getchar();
 		   name[i] = name_ch;
@@ -224,7 +224,7 @@ void show_high_score (void)
 		   else
 			   printf("%c", name_ch);
 		}
-	   printf("\n");
+	   printf("     10 character\n");
 
       fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
       fclose (tmpscore);

@@ -333,7 +333,7 @@ int case_three()
     clrscr();
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
-    puts("   score          level  name                  ");
+    puts("   score  point   level  name                  ");
     system ("cat " HIGH_SCORE_FILE "| sort -rn | head -10 >" TEMP_SCORE_FILE
               "&& cp " TEMP_SCORE_FILE " " HIGH_SCORE_FILE);
     remove (TEMP_SCORE_FILE);

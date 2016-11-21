@@ -108,7 +108,7 @@ int update (void)
 {
    int x, y;
 #ifdef ENABLE_PREVIEW
-   const int start = 5;
+   const int start = 7;
    int preview[B_COLS * 10];
    int shadow_preview[B_COLS * 10];
 
@@ -163,10 +163,10 @@ int update (void)
    printf ("Points : %d", points);
 #endif
 #ifdef ENABLE_PREVIEW
-   gotoxy (26 + 28, 5);
+   gotoxy (26 + 28, 7);
    printf ("Preview:");
 #endif
-   gotoxy (26 + 28, 10);
+   gotoxy (26 + 28, 12);
    printf ("Keys:");
 
    return getchar ();
@@ -208,13 +208,23 @@ void show_high_score (void)
 {
 #ifdef ENABLE_HIGH_SCORE
    FILE *tmpscore;
-
-   if ((tmpscore = fopen (HIGH_SCORE_FILE, "a")))
+   int i;
+   char name_ch;
+   char name[10];
+   
+   if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
-      char *name = getenv("LOGNAME");
-
-      if (!name)
-         name = "anonymous";
+	   printf("Enter your name(within 10 characters) : ");
+	   for (i = 0; ; i++)
+	   {
+		   name_ch = getchar();
+		   name[i] = name_ch;
+		   if (name_ch == '\n')
+			   break;
+		   else
+			   printf("%c", name_ch);
+		}
+	   printf("\n");
 
       fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
       fclose (tmpscore);
@@ -229,11 +239,27 @@ void show_high_score (void)
 #endif /* ENABLE_HIGH_SCORE */
 }
 
+void top_score(void)
+{
+	FILE *score;
+	int top;
+
+	if ((score = fopen(HIGH_SCORE_FILE, "r")))
+	{
+		fscanf(score, "%7d", &top);
+		fclose(score);
+	}
+
+	gotoxy(26 + 28, 5);
+	printf("Best Score : %d", top);
+}
+
 void show_online_help (void)
 {
-   const int start = 11;
+   const int start = 13;
 
    textattr(RESETATTR);
+   top_score();
    gotoxy (26 + 28, start);
    puts("j     - left");
    gotoxy (26 + 28, start + 1);
@@ -341,11 +367,41 @@ int case_two()
 		puts("Incorrect options");
 	}
 	return 0; // use this 'return value' for quit the mainpage
+
+	fprintf(stdout,"You choose Option menu\n");
+   
+ 	clrscr();
+ 	gotoxy(26, 2);
+ 	puts("*-------- Option --------*");
+ 	gotoxy(26, 3);
+	puts("|      Sound On  : 1     |");
+ 	gotoxy(26, 4);
+ 	puts("|      Sound off : 2     |");
+ 	gotoxy(26, 5);
+ 	puts("|      Quit Menu : 3     |");
+ 	gotoxy(26, 6);
+ 	puts("*------------------------*");
+ 	gotoxy(26, 7);
+ 	fprintf(stdout, "Select Option : ");
+ 	scanf("%d", &input);
 }
 int case_three()
 {
-	fprintf(stdout,"You choose Ranking menu\n");
-	return 0;
+    int num;
+    clrscr();
+	gotoxy(0, 2);
+ 	puts("*------------------ Ranking ------------------*");
+    puts("   score  point   level  name                  ");
+    system ("cat " HIGH_SCORE_FILE "| head -10 ");
+    gotoxy(0, 14);
+ 	puts("*---------------------------------------------*");
+    fprintf(stdout, "Press 3 to quit ");
+    scanf("%d",&num);
+    if(num == 3)
+        return 0;
+    else 
+        fprintf(stdout,"wrong number");
+    
 }
 int mainpage()
 {
@@ -399,7 +455,12 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
 		   clrscr();
 		   return 0;
 	   }
-	   else fprintf(stdout,"wrong number");
+	   else
+	   {
+		   gotoxy(35,11);
+		   puts("wrong number");
+		   exit(-1);
+	   }
    }
    /* Initialize board */
    ptr = board;

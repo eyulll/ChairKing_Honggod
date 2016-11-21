@@ -242,6 +242,8 @@ void top_score(void)
 		fscanf(score, "%7d", &top);
 		fclose(score);
 	}
+	else
+		top = 0;
 
 	gotoxy(26 + 28, 5);
 	printf("Best Score : %d", top);

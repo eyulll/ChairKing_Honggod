@@ -211,6 +211,7 @@ void show_high_score (void)
    int i;
    char name_ch;
    char name[11] = { '\0' };
+   char *no_name = "anonymous";
    
    if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
@@ -224,7 +225,17 @@ void show_high_score (void)
 		   else
 			   printf("%c", name_ch);
 		}
-	   printf("     10 character\n");
+
+	   if (i <= 10) {
+		   name[i + 1] = '\0';
+		   printf("     %d characters\n", i);
+	   }
+	   else {
+		   printf("\n\t\t\t\tover 10 characters, your name is anonymous\n");
+		   name[0] = '\0';
+		   sprintf(name, "%s", no_name);
+	   }
+	   
 
       fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
       fclose (tmpscore);
@@ -242,15 +253,18 @@ void show_high_score (void)
 void top_score(void)
 {
 	FILE *score;
-	int top;
+	int top, n;
+	char file_data[10];
+	
 	score = fopen(HIGH_SCORE_FILE, "r");
+	n = fread(file_data, 1, 7, score);
 
-	if (score)
+	if (score && n)
 	{
 		fscanf(score, "%7d", &top);
 		fclose(score);
 	}
-	else if (score == NULL)
+	else if (score == NULL || n == 0)
 		top = 0;
 	gotoxy(26 + 28, 5);
 	printf("Best Score : %d", top);

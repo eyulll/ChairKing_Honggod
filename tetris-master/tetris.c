@@ -284,6 +284,7 @@ int tty_fix (void)
    return tcsetattr(fileno(stdin), TCSANOW, &savemodes);
 }
 
+// music function
 void music()
 {
 	if(music_status == 0)
@@ -295,11 +296,11 @@ void music()
 			exit(-1);
 		}
 		else if (music_pid == 0)
-			execlp("mpg123", "mpg123", "-q", ".tetris.mp3", 0);
+			execlp("mpg123", "mpg123", "-q","--loop", "-1", ".tetris.mp3", NULL); // infinite loop the music
 		music_status = 1;
 	}
 	else if(music_status == 1)
-		return 0;
+		return;
 }
 
 // plz add function

@@ -210,7 +210,7 @@ void show_high_score (void)
    FILE *tmpscore;
    int i;
    char name_ch;
-   char name[10];
+   char name[10] = { '\0' };
    
    if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
@@ -243,13 +243,15 @@ void top_score(void)
 {
 	FILE *score;
 	int top;
+	score = fopen(HIGH_SCORE_FILE, "r");
 
-	if ((score = fopen(HIGH_SCORE_FILE, "r")))
+	if (score)
 	{
 		fscanf(score, "%7d", &top);
 		fclose(score);
 	}
-
+	else if (score == NULL)
+		top = 0;
 	gotoxy(26 + 28, 5);
 	printf("Best Score : %d", top);
 }

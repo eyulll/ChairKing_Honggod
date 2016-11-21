@@ -205,7 +205,7 @@ void show_high_score (void)
 {
 #ifdef ENABLE_HIGH_SCORE
    FILE *tmpscore;
-   int i;   char name_ch;   char name[10];   
+   int i;   char name_ch;   char name[10] = { '\0' };   
    if ((tmpscore = fopen(HIGH_SCORE_FILE, "a")))
    {
 	   printf("Enter your name(within 10 characters) : ");

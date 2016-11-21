@@ -310,6 +310,8 @@ int tty_fix (void)
 // plz add function
 int case_two()
 {
+	int input;
+
 	fprintf(stdout,"You choose Option menu\n");
    
  	clrscr();
@@ -334,9 +336,7 @@ int case_three()
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
     puts("   score  point   level  name                  ");
-    system ("cat " HIGH_SCORE_FILE "| sort -rn | head -10 >" TEMP_SCORE_FILE
-              "&& cp " TEMP_SCORE_FILE " " HIGH_SCORE_FILE);
-    remove (TEMP_SCORE_FILE);
+    system ("cat " HIGH_SCORE_FILE "| head -10 ");
     gotoxy(0, 14);
  	puts("*---------------------------------------------*");
     fprintf(stdout, "Press 3 to quit ");

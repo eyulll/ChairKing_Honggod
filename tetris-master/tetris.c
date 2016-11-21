@@ -325,21 +325,27 @@ int case_two()
  	puts("*------------------------*");
  	gotoxy(26, 7);
  	fprintf(stdout, "Select Option : ");
- 	
+ 	scanf("%d", &input);
 }
 int case_three()
 {
+    int num;
     clrscr();
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
-    puts("  score  points  level  name                  ");
+    puts("   score          level  name                  ");
     system ("cat " HIGH_SCORE_FILE "| sort -rn | head -10 >" TEMP_SCORE_FILE
               "&& cp " TEMP_SCORE_FILE " " HIGH_SCORE_FILE);
     remove (TEMP_SCORE_FILE);
-    system ("cat " HIGH_SCORE_FILE);
     gotoxy(0, 14);
  	puts("*---------------------------------------------*");
-	return 0;
+    fprintf(stdout, "Press 3 to quit ");
+    scanf("%d",&num);
+    if(num == 3)
+        return 0;
+    else 
+        fprintf(stdout,"wrong number");
+    
 }
 
 int mainpage()

@@ -257,15 +257,18 @@ void top_score(void)
 	char file_data[10];
 	
 	score = fopen(HIGH_SCORE_FILE, "r");
-	n = fread(file_data, 1, 7, score);
-
-	if (score && n)
-	{
-		fscanf(score, "%7d", &top);
-		fclose(score);
-	}
-	else if (score == NULL || n == 0)
+	if (score == NULL)
 		top = 0;
+	else {
+		n = fread(file_data, 1, 7, score);
+		if (n == 0)
+			top = 0;
+		else {
+			fscanf(score, "%7d", &top);
+			fclose(score);
+		}
+	}
+
 	gotoxy(26 + 28, 5);
 	printf("Best Score : %d", top);
 }

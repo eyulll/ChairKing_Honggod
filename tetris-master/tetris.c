@@ -469,8 +469,11 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
 		   case_three();
 	   else if(main_num==4)
 	   {
-		   sprintf(kil, "%s%d", kil, music_pid);
-		   system(kil);
+		   if(music_status == 1)
+		   {
+			   sprintf(kil, "%s%d", kil, music_pid);
+			   system(kil);
+		   }
 		   clrscr();
 		   return 0;
 	   }

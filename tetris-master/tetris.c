@@ -410,16 +410,16 @@ int case_three()
     clrscr();
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
-    puts("   score  point   level  name                  ");
+    puts(" score\tpoint\tlevel\tname");
+    gotoxy(0, 4);
     system ("cat " HIGH_SCORE_FILE "| head -10 ");
     gotoxy(0, 14);
  	puts("*---------------------------------------------*");
-    fprintf(stdout, "Press 3 to quit ");
-    scanf("%d",&num);
-    if(num == 3)
-        return 0;
-    else 
-        fprintf(stdout,"wrong number");
+    gotoxy(0, 15);
+    fprintf(stdout, "Press any key ");
+    getchar();
+    getchar();
+    return 0;
     
 }
 int mainpage()

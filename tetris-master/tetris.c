@@ -57,9 +57,16 @@ static int havemodes = 0;
 #define HIGH_SCORE_FILE ".tetris.scores"	// scores file hide
 #define TEMP_SCORE_FILE ".tetris-tmp.scores"	//tmp scores file hide
 
+#define A board[218] && board[219] && board[220] && board[232] // this is one of block pattern
+#define B board[242] && board[243] && board[244] && board[231]
+#define C board[245] && board[246] && board[233] && board[234]
+#define D board[247] && board[235] && board[223] && board[211]
+
 char *keys = DEFAULT_KEYS;
 int level = 1;
 int points = 0;
+int p = 0; // the number of placed block
+int c = 0; // for authentication function
 int lines_cleared = 0;
 int board[B_SIZE], shadow[B_SIZE];
 pid_t music_pid;
@@ -89,6 +96,14 @@ int shapes[] = {
     5,  TC,  BC,  BL,
     6,  TC,  BC,  2 * B_COLS,   /* sticks out */
 };
+
+void authentication()
+{
+	clrscr();
+	gotoxy(10, 1);
+	printf("This is Authentication function");
+	gotoxy(0, 2);
+}
 
 void alarm_handler (int signal __attribute__ ((unused)))
 {
@@ -526,6 +541,14 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          else
          {
             place (shape, pos, 7);
+	     gotoxy(2, 1);
+	     p++;
+	     printf("the number of placed block : %d", p); //check 'p', you can earse this
+	     if (p == 4) {  // if the number of block is 4
+		     if (A && B && C && D) {// if pattern is correct
+			     c = 1;
+			     break; } // break the while(1) loop
+	     }
             ++points;
             for (j = 0; j < 252; j = B_COLS * (j / B_COLS + 1))
             {
@@ -606,12 +629,14 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
       place (shape, pos, 7);
       c = update ();
       place (shape, pos, 0);
-   }
+   } //  here, end of the while(1) loop
 
    if (tty_fix () == -1)
    {
       return 1;
    }
+   if (c == 1)
+	   authentication();
 
    return 0;
 }

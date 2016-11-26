@@ -209,7 +209,6 @@ void place (int *shape, int pos, int b)
 int *next_shape (void)
 {
    int *next = peek_shape;
-   if (p == 4) p = 5;
    if (p < 4) {
 	   if (p == 0) peek_shape = &shapes[40]; 
 	   if (p == 1) peek_shape = &shapes[12];
@@ -219,6 +218,7 @@ int *next_shape (void)
    }
    else {
 	   peek_shape = &shapes[rand() % 7 * 4];
+	p++;
    }
    if (!next)
    {
@@ -550,10 +550,11 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          else
          {
             place (shape, pos, 7);
-		if (p == 5) {  // if the number of block is 4
-			if (A && B && C && D) {// if pattern is correct
-				a = 1;
-				break;  } // break the while(1) loop
+			if (p == 5) {  // if the number of block is 4
+				if (A && B && C && D) {// if pattern is correct
+					a =1;
+					break; 
+				} // break the while(1) loop
 			}
             ++points;
             for (j = 0; j < 252; j = B_COLS * (j / B_COLS + 1))

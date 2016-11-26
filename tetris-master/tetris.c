@@ -66,7 +66,7 @@ char *keys = DEFAULT_KEYS;
 int level = 1;
 int points = 0;
 int p = 0; // the number of placed block
-int c = 0; // for authentication function
+int a = 0; // for authentication function
 int lines_cleared = 0;
 int board[B_SIZE], shadow[B_SIZE];
 pid_t music_pid;
@@ -209,8 +209,17 @@ void place (int *shape, int pos, int b)
 int *next_shape (void)
 {
    int *next = peek_shape;
-
-   peek_shape = &shapes[rand () % 7 * 4];
+   if (p == 4) p = 5;
+   if (p < 4) {
+	   if (p == 0) peek_shape = &shapes[40]; 
+	   if (p == 1) peek_shape = &shapes[12];
+	   if (p == 2) peek_shape = &shapes[20];
+	   if (p == 3) peek_shape = &shapes[72];
+	   p++;
+   }
+   else {
+	   peek_shape = &shapes[rand() % 7 * 4];
+   }
    if (!next)
    {
       return next_shape ();
@@ -541,14 +550,12 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          else
          {
             place (shape, pos, 7);
-	     gotoxy(2, 1);
-	     p++;
-	     printf("the number of placed block : %d", p); //check 'p', you can earse this
-	     if (p == 4) {  // if the number of block is 4
-		     if (A && B && C && D) {// if pattern is correct
-			     c = 1;
-			     break; } // break the while(1) loop
-	     }
+			if (p == 4) {  // if the number of block is 4
+				if (A && B && C && D) {// if pattern is correct
+					a = 1;
+					break; 
+				} // break the while(1) loop
+			}
             ++points;
             for (j = 0; j < 252; j = B_COLS * (j / B_COLS + 1))
             {
@@ -635,7 +642,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    {
       return 1;
    }
-   if (c == 1)
+   if (a == 1)
 	   authentication();
 
    return 0;

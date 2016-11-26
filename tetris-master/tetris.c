@@ -210,10 +210,10 @@ int *next_shape (void)
 {
    int *next = peek_shape;
    if (p < 4) {
-	   if (p == 0) peek_shape = &shapes[40]; 
+	   if (p == 0) peek_shape = &shapes[8]; 
 	   if (p == 1) peek_shape = &shapes[12];
 	   if (p == 2) peek_shape = &shapes[20];
-	   if (p == 3) peek_shape = &shapes[72];
+	   if (p == 3) peek_shape = &shapes[24];
 	   p++;
    }
    else {

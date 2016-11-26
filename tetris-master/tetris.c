@@ -99,10 +99,45 @@ int shapes[] = {
 
 void authentication()
 {
+	char name[20]= { '0' };
+    char pswd[20]= { '0' };
+    char pw_name[9] = "hong1234";
+    char pw_passwd[9] = "gwan1234";
 	clrscr();
-	gotoxy(10, 1);
-	printf("This is Authentication function");
-	gotoxy(0, 2);
+	gotoxy(25, 2);
+	fprintf(stdout, "*------------------------------*\n");
+	gotoxy(25, 3);
+	fprintf(stdout, "|            Login             |\n");
+	gotoxy(25, 4);
+	fprintf(stdout, "|      ID :                    |\n");
+	gotoxy(25, 5);
+	fprintf(stdout, "|      PW :                    |\n");
+	gotoxy(25, 6);
+	fprintf(stdout, "*------------------------------*\n");
+	
+    gotoxy(25, 4);
+    fprintf(stdout,"|      ID :");
+    scanf("%[^\n]", name);
+    getchar();
+    
+	gotoxy(25, 5);
+    fprintf(stdout,"|      PW :");
+    scanf("%[^\n]", pswd);
+    getchar();
+
+    if(pw_name==name || pw_passwd==pswd )
+    {
+        clrscr();  
+        gotoxy(20, 4);
+        fprintf(stdout,"Login Success\n\n");
+    }
+    else
+    {
+        clrscr();
+        gotoxy(20, 4);
+        fprintf(stdout,"Login Fail\n\n");
+    }
+
 }
 
 void alarm_handler (int signal __attribute__ ((unused)))

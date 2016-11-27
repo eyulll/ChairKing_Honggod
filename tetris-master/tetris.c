@@ -32,6 +32,7 @@
 
 #include "conio.h"
 #include "tetris.h"
+#include "getch.h"
 
 static struct termios savemodes;
 static int havemodes = 0;
@@ -96,49 +97,6 @@ int shapes[] = {
     5,  TC,  BC,  BL,
     6,  TC,  BC,  2 * B_COLS,   /* sticks out */
 };
-
-void authentication()
-{
-	char name[20]= { '0' };
-    char pswd[20]= { '0' };
-    char pw_name[9] = "hong1234";
-    char pw_passwd[9] = "gwan1234";
-	clrscr();
-	gotoxy(25, 2);
-	fprintf(stdout, "*------------------------------*\n");
-	gotoxy(25, 3);
-	fprintf(stdout, "|            Login             |\n");
-	gotoxy(25, 4);
-	fprintf(stdout, "|      ID :                    |\n");
-	gotoxy(25, 5);
-	fprintf(stdout, "|      PW :                    |\n");
-	gotoxy(25, 6);
-	fprintf(stdout, "*------------------------------*\n");
-	
-    gotoxy(25, 4);
-    fprintf(stdout,"|      ID :");
-    scanf("%[^\n]", name);
-    getchar();
-    
-	gotoxy(25, 5);
-    fprintf(stdout,"|      PW :");
-    scanf("%[^\n]", pswd);
-    getchar();
-
-    if(pw_name==name || pw_passwd==pswd )
-    {
-        clrscr();  
-        gotoxy(20, 4);
-        fprintf(stdout,"Login Success\n\n");
-    }
-    else
-    {
-        clrscr();
-        gotoxy(20, 4);
-        fprintf(stdout,"Login Fail\n\n");
-    }
-
-}
 
 void alarm_handler (int signal __attribute__ ((unused)))
 {
@@ -283,25 +241,27 @@ void show_high_score (void)
 			   break;
 		   else
 			   printf("%c", name_ch);
-		}
+	   }
 
-	   if (i <= 10) {
+	   if (i <= 10)
+	   {
 		   name[i + 1] = '\0';
 		   printf("     %d characters\n", i);
 	   }
-	   else {
+	   else
+	   {
 		   printf("\n\t\t\t\tover 10 characters, your name is anonymous\n");
 		   name[0] = '\0';
 		   sprintf(name, "%s", no_name);
 	   }
 	   
 
-      fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
-      fclose (tmpscore);
+	   fprintf (tmpscore, "%7d\t %5d\t  %3d\t%s\n", points * level, points, level, name);
+	   fclose (tmpscore);
 
-      system ("cat " HIGH_SCORE_FILE "| sort -rn | head -10 >" TEMP_SCORE_FILE
+	   system ("cat " HIGH_SCORE_FILE "| sort -rn | head -10 >" TEMP_SCORE_FILE
               "&& cp " TEMP_SCORE_FILE " " HIGH_SCORE_FILE);
-      remove (TEMP_SCORE_FILE);
+	   remove (TEMP_SCORE_FILE);
    }
 //         puts ("\nHit RETURN to see high scores, ^C to skip.");
    fprintf (stderr, "  Score\tPoints\tLevel\tName\n");
@@ -388,6 +348,50 @@ int tty_fix (void)
    return tcsetattr(fileno(stdin), TCSANOW, &savemodes);
 }
 
+void authentication()
+{
+	char id[20];
+	char passwd[20];
+	char pw_id[9] = "hong1234";
+	char pw_passwd[9] = "kwan1234";
+	
+	clrscr();
+	gotoxy(25, 2);
+	puts("*------------------------------*");
+	gotoxy(25, 3);
+	puts("|            Login             |");
+	gotoxy(25, 4);
+	puts("|      ID :                    |");
+	gotoxy(25, 5);
+	puts("|      PW :                    |");
+	gotoxy(25, 6);
+	puts("*------------------------------*");
+
+	gotoxy(25, 4);
+	printf("|      ID : ");
+	scanf("%s", id);
+
+	tty_break();
+	gotoxy(25, 5);
+	printf("|      PW : ");
+	scanf("%s", passwd);
+	tty_fix();
+	
+	if(strcmp(pw_id, id) == 0 && strcmp(pw_passwd, passwd) == 0)
+	{
+		clrscr();  
+        	gotoxy(20, 4);
+        	printf("Login Success\n\n");
+    	}
+    	else
+    	{
+        	clrscr();
+        	gotoxy(20, 4);
+		printf("Login Failed\n\n");
+    	}
+
+}
+
 // music function
 void music()
 {
@@ -407,12 +411,23 @@ void music()
 		return;
 }
 
+void kil_music()
+{
+	if(music_status == 1)
+	{
+		sprintf(kil, "%s%d", kil, music_pid);
+		system(kil);
+		music_status = 0;
+	}
+}
+
 // plz add function
 int case_two()
 {
 	int input;
 	char kill_music[20] = "kill -s 9 ";
 
+	tty_break();
 	clrscr();
 	gotoxy(26, 2);
 	puts("*-------- Option --------*");
@@ -425,18 +440,19 @@ int case_two()
 	gotoxy(26, 6);
 	puts("*------------------------*");
 	gotoxy(26, 7);
-	fprintf(stdout, "Select Option : ");
-	scanf("%d", &input);
+	puts("Press the Menu");
+	input = getch();
+	tty_fix();
 
-	if(input == 1)
+	if(input == '1')
 		music();
-	else if(input == 2)
+	else if(input == '2')
 	{
 		sprintf(kill_music, "%s%d", kill_music, music_pid);
 		system(kill_music);
 		music_status = 0;
 	}
-	else if(input == 3)
+	else if(input == '3')
 	{
 		return 0;
 	}
@@ -445,66 +461,59 @@ int case_two()
 		puts("Incorrect options");
 	}
 	return 0; // use this 'return value' for quit the mainpage
-
-	fprintf(stdout,"You choose Option menu\n");
-   
- 	clrscr();
- 	gotoxy(26, 2);
- 	puts("*-------- Option --------*");
- 	gotoxy(26, 3);
-	puts("|      Sound On  : 1     |");
- 	gotoxy(26, 4);
- 	puts("|      Sound off : 2     |");
- 	gotoxy(26, 5);
- 	puts("|      Quit Menu : 3     |");
- 	gotoxy(26, 6);
- 	puts("*------------------------*");
- 	gotoxy(26, 7);
- 	fprintf(stdout, "Select Option : ");
- 	scanf("%d", &input);
 }
+
 int case_three()
 {
-    int num;
-    clrscr();
+	int num;
+	
+	clrscr();
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
-    puts(" score\tpoint\tlevel\tname");
-    gotoxy(0, 4);
-    system ("cat " HIGH_SCORE_FILE "| head -10 ");
-    gotoxy(0, 14);
+	puts(" score\tpoint\tlevel\tname");
+	gotoxy(0, 4);
+	system ("cat " HIGH_SCORE_FILE "| head -10 ");
+	gotoxy(0, 14);
  	puts("*---------------------------------------------*");
-    gotoxy(0, 15);
-    fprintf(stdout, "Press any key ");
-    getchar();
-    getchar();
-    return 0;
+	
+	gotoxy(0, 15);
+	tty_break();
+	
+	puts("Press any key");
+	getch();
+	
+	tty_fix();
+	
+	return 0;
     
 }
+
 int mainpage()
 {
 	int input;
 
 	clrscr();
+	tty_break();
 	gotoxy(25, 2);
-	fprintf(stdout, "*------------------------------*\n");
+	puts("*------------------------------*");
 	gotoxy(25, 3);
-	fprintf(stdout, "|            Tetris            |\n");
+	puts("|            Tetris            |");
 	gotoxy(25, 4);
-	fprintf(stdout, "|                              |\n");
+	puts("|                              |");
 	gotoxy(25, 5);
-	fprintf(stdout, "|           1. Start           |\n");
+	puts("|           1. Start           |");
 	gotoxy(25, 6);
-	fprintf(stdout, "|           2. Option          |\n");
+	puts("|           2. Option          |");
 	gotoxy(25, 7);
-	fprintf(stdout, "|           3. Ranking         |\n");
+	puts("|           3. Ranking         |");
 	gotoxy(25, 8);
-	fprintf(stdout, "|           4. Exit            |\n");
+	puts("|           4. Exit            |");
 	gotoxy(25, 9);
-	fprintf(stdout, "*------------------------------*\n");
+	puts("*------------------------------*");
 	gotoxy(25, 10);
-	fprintf(stdout, "Select the menu : ");
-	scanf("%d", &input);
+	puts("Select the menu");
+	input = getch();
+	tty_fix();
 
 	return input;
 }
@@ -520,19 +529,15 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
    while(1)
    {
 	   main_num = mainpage();
-	   if(main_num==1)
+	   if(main_num == '1')
 		   break;
-	   else if(main_num==2)
+	   else if(main_num == '2')
 		   case_two();
-	   else if(main_num==3)
+	   else if(main_num == '3')
 		   case_three();
-	   else if(main_num==4)
+	   else if(main_num == '4')
 	   {
-		   if(music_status == 1)
-		   {
-			   sprintf(kil, "%s%d", kil, music_pid);
-			   system(kil);
-		   }
+		   kil_music();
 		   clrscr();
 		   return 0;
 	   }
@@ -540,6 +545,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
 	   {
 		   gotoxy(35,11);
 		   puts("wrong number");
+		   kil_music();
 		   exit(-1);
 	   }
    }
@@ -645,11 +651,7 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
          if (c == keys[KEY_QUIT])
          {
             clrscr();
-	    if(music_status == 1)
-	    {
-	    	sprintf(kil, "%s%d", kil, music_pid);
-	    	system(kil);
-	    }
+	    kil_music();
             gotoxy(0,0);
             textattr(RESETATTR);
 
@@ -678,7 +680,11 @@ int main (int argc __attribute__ ((unused)), char *argv[] __attribute__ ((unused
       return 1;
    }
    if (a == 1)
+   {
+	   sigprocmask(SIG_BLOCK, &set, NULL);
+	   kil_music();
 	   authentication();
+   }
 
    return 0;
 }

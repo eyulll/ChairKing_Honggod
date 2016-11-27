@@ -466,13 +466,17 @@ int case_two()
 int case_three()
 {
 	int num;
+	int file_ok = access(HIGH_SCORE_FILE, 0);
 	
 	clrscr();
 	gotoxy(0, 2);
  	puts("*------------------ Ranking ------------------*");
 	puts(" score\tpoint\tlevel\tname");
 	gotoxy(0, 4);
-	system ("cat " HIGH_SCORE_FILE "| head -10 ");
+	if(file_ok == 0)
+	{
+		system ("cat " HIGH_SCORE_FILE "| head -10 ");
+	}
 	gotoxy(0, 14);
  	puts("*---------------------------------------------*");
 	

@@ -1,5 +1,11 @@
 #include <stdio.h>
+
+#ifdef TARGET_OS_MAC
+#include <terms.h>
+#elif __linux__
 #include <termio.h>
+#endif
+
 int getch(void)
 {
 	int ch;

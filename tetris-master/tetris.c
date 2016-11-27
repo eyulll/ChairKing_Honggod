@@ -327,10 +327,10 @@ int tty_fix (void)
 
 void authentication()
 {
-	char id[20];
-	char passwd[20];
-	char pw_id[9] = "hong1234";
-	char pw_passwd[9] = "kwan1234";
+	char id[15];
+	char passwd[15];
+	char *pw_id = "hong1234";
+	char *pw_passwd = "kwan1234";
 	
 	clrscr();
 	gotoxy(25, 2);
@@ -346,12 +346,12 @@ void authentication()
 
 	gotoxy(25, 4);
 	printf("|      ID : ");
-	scanf("%s", id);
+	scanf("%15s", id);
 
 	tty_break();
 	gotoxy(25, 5);
 	printf("|      PW : ");
-	scanf("%s", passwd);
+	scanf("%15s", passwd);
 	tty_fix();
 	
 	if(strcmp(pw_id, id) == 0 && strcmp(pw_passwd, passwd) == 0)

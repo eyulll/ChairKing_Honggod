@@ -131,14 +131,11 @@ int update (void)
    {
       for (x = 0; x < B_COLS; x++)
       {
-         if (preview[y * B_COLS + x] - shadow_preview[y * B_COLS + x])
-         {
-            shadow_preview[y * B_COLS + x] = preview[y * B_COLS + x];
             gotoxy (x * 2 + 26 + 28, start + y);
             printf ("\e[%dm  ", preview[y * B_COLS + x]);
-         }
       }
    }
+
 #endif
 
    /* Display board. */
